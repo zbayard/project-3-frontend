@@ -75,7 +75,7 @@ function activateSong (songObj) {
 console.log(songObj)
 actSongTitle.innerHTML = songObj.name
 actSongImg.setAttribute('src', songObj.image)
-actSongImg.setAttribute('alt', songObj.image)
+actSongImg.setAttribute('alt', songObj.name)
 
 }
 
