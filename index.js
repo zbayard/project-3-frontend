@@ -10,6 +10,9 @@ const newSongButton = document.querySelector('button#new-song-button')
 const body = document.querySelector('body')
 const songsContainer = document.querySelector('div#songs-container')
 const newSongForm = document.querySelector('#new-song-form')
+const activeSong = document.querySelector('div#active-song')
+const actSongTitle = document.querySelector('h1#song-title')
+const actSongImg = activeSong.querySelector('img')
 
 ///////////////// FETCH REQUESTS ////////////////
 
@@ -32,6 +35,12 @@ function getSongs () {
     .then(songs => songs.forEach( song => renderSong(song)))
 }
 
+function getSong (songId) {
+    fetch(`http://localhost:3000/songs/${songId}`)
+    .then(res => res.json())
+    .then(song => activateSong(song))
+}
+
 function postSong(songData) {
     fetch('http://localhost:3000/songs', {
         method: 'POST',
@@ -52,9 +61,24 @@ newSongButton.addEventListener('click', function(e) {
     getNewSongForm ()
 })
 
+songsContainer.addEventListener('click', function(e) {
+    if (e.target.matches('div.song-div')) {
+        getSong(e.target.dataset.id)
+    }
+})
+
 
 
 //////////////// HELPER METHODS //////////////////
+
+function activateSong (songObj) {
+console.log(songObj)
+actSongTitle.innerHTML = songObj.name
+actSongImg.setAttribute('src', songObj.image)
+actSongImg.setAttribute('alt', songObj.image)
+
+}
+
 function renderUser(user){
     const newUser = document.createElement('li')
     newUser.innerHTML = user.name
@@ -65,6 +89,7 @@ function renderUser(user){
 function renderSong(song) {
     const newSong = document.createElement('div')
     newSong.innerHTML = song.name
+    newSong.setAttribute('class', 'song-div')
     newSong.dataset.id = song.id
 
     const deleteBtn = document.createElement("button")
