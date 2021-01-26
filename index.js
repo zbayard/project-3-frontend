@@ -2,7 +2,7 @@
 
 
 getUsers()
-getSongs ()
+// getSongs ()
 
 //////////  ELEMENT DECLARATIONS ///////////////////////
 usersContainer = document.querySelector('div#users')
@@ -13,6 +13,7 @@ const newSongForm = document.querySelector('#new-song-form')
 const activeSong = document.querySelector('div#active-song')
 const actSongTitle = document.querySelector('h1#song-title')
 const actSongImg = activeSong.querySelector('img')
+const myRecordsBtn = document.querySelector('#my-records')
 
 ///////////////// FETCH REQUESTS ////////////////
 
@@ -85,6 +86,12 @@ songsContainer.addEventListener('click', function(e) {
     }
 })
 
+myRecordsBtn.addEventListener("click", ()=>{
+    getSongs()
+})
+
+
+
 
 
 //////////////// HELPER METHODS //////////////////
@@ -145,6 +152,10 @@ function renderSong(song) {
     newSong.innerHTML = song.name
     newSong.setAttribute('class', 'song-div')
     newSong.dataset.id = song.id
+
+    const songImg = document.createElement("img")
+    songImg.src = song.image
+    newSong.append(songImg)
 
     const deleteBtn = document.createElement("button")
     deleteBtn.innerHTML = "delete song"
