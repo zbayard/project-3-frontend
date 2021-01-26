@@ -14,6 +14,7 @@ const activeSong = document.querySelector('div#active-song')
 const actSongTitle = document.querySelector('h1#song-title')
 const actSongImg = activeSong.querySelector('img')
 const userInfo = document.querySelector('h1#user-info')
+const currentUser = document.querySelector('p#active-user')
 
 ///////////////// FETCH REQUESTS ////////////////
 
@@ -22,6 +23,7 @@ function deleteSong(song) {
         method: 'DELETE'
     })
 }
+
 
 
 function getUsers () {
@@ -79,13 +81,40 @@ songsContainer.addEventListener('click', function(e) {
 function promptUser () {
     userName = window.prompt('Please enter your username')
     setUser(userName)
-    console.log(userName)
+    
 }
 
-function setUser (name) {
-userInfo.innerHTML = `${name}'s page`
+
+function createUser () {
+    
+}
+
+function setUser (userName) {
+userInfo.innerHTML = `${userName}'s page`
+
+function setActiveUser (userArr) {
+
+    let activeUser = userArr.filter ( user => user.name === userName)
+   if (activeUser[0]) {
+        currentUser.innerHTML = activeUser[0].name
+   }
+   else {
+       createUser ()
+   }
+}
+
+function searchUsers () {
+    fetch(`http://localhost:3000/users`)
+.then(response => response.json())
+.then(users => setActiveUser(users))
 
 }
+searchUsers() 
+}
+
+
+
+
 
 function activateSong (songObj) {
 console.log(songObj)
