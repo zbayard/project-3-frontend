@@ -56,6 +56,21 @@ function postSong(songData) {
       })
   }
 
+  function patchNote(songId, newNoteObj){
+      fetch(`http://localhost:3000/songs/${songId}`, {
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(newNoteObj)
+      })
+      .then(res => res.json())
+      .then(songObj => {
+          console.log("success")
+      })
+  }
+
 /////////////// EVENT LISTENERS /////////////////////
 newSongButton.addEventListener('click', function(e) {
     getNewSongForm ()
@@ -64,12 +79,51 @@ newSongButton.addEventListener('click', function(e) {
 songsContainer.addEventListener('click', function(e) {
     if (e.target.matches('div.song-div')) {
         getSong(e.target.dataset.id)
+    }if(e.target.matches("#leave-note")){
+        const parentDiv = e.target.closest('div')
+        leaveNote(parentDiv.dataset.id, parentDiv)
     }
 })
 
 
 
 //////////////// HELPER METHODS //////////////////
+
+function leaveNote(songObj, songDiv){
+    const noteForm = document.createElement("form")
+    const noteInput = document.createElement("input")
+    const noteSubmit = document.createElement("input")
+    noteInput.name = "note"
+    noteSubmit.type = "submit"
+    noteForm.append(noteInput, noteSubmit)
+    songDiv.append(noteForm)
+    console.log(songDiv)
+    console.log(songObj)
+    
+    
+
+    noteForm.addEventListener("submit", e => {
+        e.preventDefault()
+        console.log(e)
+        
+
+        const newNoteObj = {
+            bio: e.target.note.value
+        }
+        
+
+        patchNote(songObj, newNoteObj)
+        noteForm.remove()
+    })
+}
+
+// function addNoteToDom(songObj){
+//     // ****DOM LOGIC FOR NEW NOTE****
+
+//     const
+
+//     addNoteTo
+// }
 
 function activateSong (songObj) {
 console.log(songObj)
@@ -95,12 +149,25 @@ function renderSong(song) {
     const deleteBtn = document.createElement("button")
     deleteBtn.innerHTML = "delete song"
     newSong.append(deleteBtn)
+    // songsContainer.append(newSong)
+
+    const editBtn = document.createElement("button")
+    editBtn.id = "leave-note"
+    editBtn.innerHTML = "leave note"
+    newSong.append(editBtn)
     songsContainer.append(newSong)
 
     deleteBtn.addEventListener("click", () => {
         newSong.remove()
         deleteSong(song)
     })
+
+    
+
+    
+    
+
+    
 
 }
 
