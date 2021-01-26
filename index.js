@@ -2,7 +2,7 @@
 
 
 getUsers()
-getSongs ()
+// getSongs ()
 
 //////////  ELEMENT DECLARATIONS ///////////////////////
 usersContainer = document.querySelector('div#users')
@@ -13,8 +13,12 @@ const newSongForm = document.querySelector('#new-song-form')
 const activeSong = document.querySelector('div#active-song')
 const actSongTitle = document.querySelector('h1#song-title')
 const actSongImg = activeSong.querySelector('img')
+<<<<<<< HEAD
 const userInfo = document.querySelector('h1#user-info')
 const currentUser = document.querySelector('p#active-user')
+=======
+const myRecordsBtn = document.querySelector('#my-records')
+>>>>>>> edbc234da8e8a00f2039775d5be8a76acb789ad9
 
 ///////////////// FETCH REQUESTS ////////////////
 
@@ -59,6 +63,21 @@ function postSong(songData) {
       })
   }
 
+  function patchNote(songId, newNoteObj){
+      fetch(`http://localhost:3000/songs/${songId}`, {
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(newNoteObj)
+      })
+      .then(res => res.json())
+      .then(songObj => {
+          console.log("success")
+      })
+  }
+
 /////////////// EVENT LISTENERS /////////////////////
 window.addEventListener('DOMContentLoaded', function (e) {
     promptUser ()
@@ -71,13 +90,23 @@ newSongButton.addEventListener('click', function(e) {
 songsContainer.addEventListener('click', function(e) {
     if (e.target.matches('div.song-div')) {
         getSong(e.target.dataset.id)
+    }if(e.target.matches("#leave-note")){
+        const parentDiv = e.target.closest('div')
+        leaveNote(parentDiv.dataset.id, parentDiv)
     }
 })
+
+myRecordsBtn.addEventListener("click", ()=>{
+    getSongs()
+})
+
+
 
 
 
 //////////////// HELPER METHODS //////////////////
 
+<<<<<<< HEAD
 function promptUser () {
     userName = window.prompt('Please enter your username')
     setUser(userName)
@@ -115,6 +144,43 @@ searchUsers()
 
 
 
+=======
+function leaveNote(songObj, songDiv){
+    const noteForm = document.createElement("form")
+    const noteInput = document.createElement("input")
+    const noteSubmit = document.createElement("input")
+    noteInput.name = "note"
+    noteSubmit.type = "submit"
+    noteForm.append(noteInput, noteSubmit)
+    songDiv.append(noteForm)
+    console.log(songDiv)
+    console.log(songObj)
+    
+    
+
+    noteForm.addEventListener("submit", e => {
+        e.preventDefault()
+        console.log(e)
+        
+
+        const newNoteObj = {
+            bio: e.target.note.value
+        }
+        
+
+        patchNote(songObj, newNoteObj)
+        noteForm.remove()
+    })
+}
+
+// function addNoteToDom(songObj){
+//     // ****DOM LOGIC FOR NEW NOTE****
+
+//     const
+
+//     addNoteTo
+// }
+>>>>>>> edbc234da8e8a00f2039775d5be8a76acb789ad9
 
 function activateSong (songObj) {
 console.log(songObj)
@@ -137,15 +203,32 @@ function renderSong(song) {
     newSong.setAttribute('class', 'song-div')
     newSong.dataset.id = song.id
 
+    const songImg = document.createElement("img")
+    songImg.src = song.image
+    newSong.append(songImg)
+
     const deleteBtn = document.createElement("button")
     deleteBtn.innerHTML = "delete song"
     newSong.append(deleteBtn)
+    // songsContainer.append(newSong)
+
+    const editBtn = document.createElement("button")
+    editBtn.id = "leave-note"
+    editBtn.innerHTML = "leave note"
+    newSong.append(editBtn)
     songsContainer.append(newSong)
 
     deleteBtn.addEventListener("click", () => {
         newSong.remove()
         deleteSong(song)
     })
+
+    
+
+    
+    
+
+    
 
 }
 
