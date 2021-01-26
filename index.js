@@ -13,12 +13,7 @@ const newSongForm = document.querySelector('#new-song-form')
 const activeSong = document.querySelector('div#active-song')
 const actSongTitle = document.querySelector('h1#song-title')
 const actSongImg = activeSong.querySelector('img')
-<<<<<<< HEAD
-const userInfo = document.querySelector('h1#user-info')
-const currentUser = document.querySelector('p#active-user')
-=======
 const myRecordsBtn = document.querySelector('#my-records')
->>>>>>> edbc234da8e8a00f2039775d5be8a76acb789ad9
 
 ///////////////// FETCH REQUESTS ////////////////
 
@@ -106,45 +101,6 @@ myRecordsBtn.addEventListener("click", ()=>{
 
 //////////////// HELPER METHODS //////////////////
 
-<<<<<<< HEAD
-function promptUser () {
-    userName = window.prompt('Please enter your username')
-    setUser(userName)
-    
-}
-
-
-function createUser () {
-    
-}
-
-function setUser (userName) {
-userInfo.innerHTML = `${userName}'s page`
-
-function setActiveUser (userArr) {
-
-    let activeUser = userArr.filter ( user => user.name === userName)
-   if (activeUser[0]) {
-        currentUser.innerHTML = activeUser[0].name
-   }
-   else {
-       createUser ()
-   }
-}
-
-function searchUsers () {
-    fetch(`http://localhost:3000/users`)
-.then(response => response.json())
-.then(users => setActiveUser(users))
-
-}
-searchUsers() 
-}
-
-
-
-
-=======
 function leaveNote(songObj, songDiv){
     const noteForm = document.createElement("form")
     const noteInput = document.createElement("input")
@@ -180,7 +136,6 @@ function leaveNote(songObj, songDiv){
 
 //     addNoteTo
 // }
->>>>>>> edbc234da8e8a00f2039775d5be8a76acb789ad9
 
 function activateSong (songObj) {
 console.log(songObj)
