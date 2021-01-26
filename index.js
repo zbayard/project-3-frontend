@@ -13,6 +13,7 @@ const newSongForm = document.querySelector('#new-song-form')
 const activeSong = document.querySelector('div#active-song')
 const actSongTitle = document.querySelector('h1#song-title')
 const actSongImg = activeSong.querySelector('img')
+const userInfo = document.querySelector('h1#user-info')
 
 ///////////////// FETCH REQUESTS ////////////////
 
@@ -57,6 +58,10 @@ function postSong(songData) {
   }
 
 /////////////// EVENT LISTENERS /////////////////////
+window.addEventListener('DOMContentLoaded', function (e) {
+    promptUser ()
+})
+
 newSongButton.addEventListener('click', function(e) {
     getNewSongForm ()
 })
@@ -70,6 +75,17 @@ songsContainer.addEventListener('click', function(e) {
 
 
 //////////////// HELPER METHODS //////////////////
+
+function promptUser () {
+    userName = window.prompt('Please enter your username')
+    setUser(userName)
+    console.log(userName)
+}
+
+function setUser (name) {
+userInfo.innerHTML = `${name}'s page`
+
+}
 
 function activateSong (songObj) {
 console.log(songObj)
