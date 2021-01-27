@@ -24,6 +24,7 @@ const testButton = document.createElement('button')
 body.append(testButton)
 testButton.addEventListener('click', function (e) {
     
+
 // renderUserView()
 
 })
@@ -84,7 +85,7 @@ fetch(`http://localhost:3000/users`)
 }
 
 function getSongs () {
-    mainDiv.innerHTML = ""
+    mainDiv.innerHTML = "<h1>Record Library</h1>"
     fetch('http://localhost:3000/songs')
     .then(res => res.json())
     .then(songs => songs.forEach( song => renderSong(song)))
@@ -128,7 +129,11 @@ function postSong(songData) {
 
 /////////////// EVENT LISTENERS /////////////////////
 
-    
+    favesButton.addEventListener('click', function (e) {
+        mainDiv.innerHTML = ""
+        getUserSongs(currentUser.dataset.id)
+        .then (data => data.forEach (song => renderSong(song)))
+    })
 
 
 myFriends.addEventListener('click', function(e) {
@@ -146,7 +151,7 @@ newSongButton.addEventListener('click', function(e) {
 })
 
 mainDiv.addEventListener('click', function(e) {
-    if (e.target.matches('div.song-div')) {
+    if (e.target.matches('div.flip-card-back')) {
         getSong(e.target.dataset.id)
     }if(e.target.matches("#leave-note")){
         const parentDiv = e.target.closest('div')
@@ -364,11 +369,11 @@ playRecordBtn.addEventListener('click', ()=> {
 })
 
 addRecordBtn.addEventListener('click', function(e){
-ownershipObj = {
-    song_id: songObj.id,
-    user_id: currentUser.dataset.id
-}
-postOwnership(ownershipObj)
+    const ownershipObj = {
+        song_id: songObj.id,
+        user_id: currentUser.dataset.id
+    }
+    postOwnership(ownershipObj)
 })
 
 }
@@ -402,7 +407,9 @@ function renderSong(song) {
     const newSongFront = document.createElement('div')
     newSongFront.setAttribute('class', 'flip-card-front')
     const newSongBack = document.createElement('div')
+ 
     newSongBack.setAttribute('class', 'flip-card-back')
+    newSongBack.dataset.id = song.id
 
     // ****OTHER SHIT FOR FLIP CARDS*****
     const trackName = document.createElement('h1')
@@ -410,6 +417,7 @@ function renderSong(song) {
     const trackArtist = document.createElement('p')
     trackArtist.innerHTML = song.artist
     const songImg = document.createElement("img")
+    songImg.setAttribute('class', 'record-image')
     songImg.src = song.image
 
     // ***APPENDS TO DIVS***
@@ -419,7 +427,7 @@ function renderSong(song) {
     newSong.append(newSongInner)
 
  
-    // songsContainer.append(newSong)
+    
 
     // const editBtn = document.createElement("button")
     // editBtn.id = "leave-note"
@@ -431,15 +439,8 @@ function renderSong(song) {
     //     newSong.remove()
     //     deleteSong(song)
     // })
-
-    
-
-    
-    
-
-    
-
 }
+
 
 function getNewSongForm(){
     const newSongForm = document.createElement("form")
