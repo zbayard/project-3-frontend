@@ -382,21 +382,40 @@ function renderUser(user){
 
 function renderSong(song) {
     const newSong = document.createElement('div')
-    newSong.innerHTML = song.name
+    // newSong.innerHTML = song.name
     newSong.setAttribute('class', 'song-div')
     newSong.dataset.id = song.id
 
+
+    // ****FLIP CARD DIVS****
+    const newSongInner = document.createElement('div')
+    newSongInner.setAttribute('class', 'flip-card-inner')
+    const newSongFront = document.createElement('div')
+    newSongFront.setAttribute('class', 'flip-card-front')
+    const newSongBack = document.createElement('div')
+    newSongBack.setAttribute('class', 'flip-card-back')
+
+    // ****OTHER SHIT FOR FLIP CARDS*****
+    const trackName = document.createElement('h1')
+    trackName.innerHTML = song.name
+    const trackArtist = document.createElement('p')
+    trackArtist.innerHTML = song.artist
     const songImg = document.createElement("img")
     songImg.src = song.image
-    newSong.append(songImg)
+
+    // ***APPENDS TO DIVS***
+    newSongBack.append(trackName, trackArtist)
+    newSongFront.append(songImg)
+    newSongInner.append(newSongFront, newSongBack)
+    newSong.append(newSongInner)
 
  
     // songsContainer.append(newSong)
 
-    const editBtn = document.createElement("button")
-    editBtn.id = "leave-note"
-    editBtn.innerHTML = "leave note"
-    newSong.append(editBtn)
+    // const editBtn = document.createElement("button")
+    // editBtn.id = "leave-note"
+    // editBtn.innerHTML = "leave note"
+    // newSong.append(editBtn)
     mainDiv.append(newSong)
 
     // deleteBtn.addEventListener("click", () => {
