@@ -311,12 +311,14 @@ addRecordBtn.innerHTML= 'Add this record to your collection'
 addRecordBtn.dataset.id = songObj.id
 activeSong.append(addRecordBtn)
 const playRecordBtn = document.createElement('button')
-playRecordBtn.innerHTML = 'Play Record'
+playRecordBtn.innerHTML = 'Load Record'
 playRecordBtn.dataset.id = songObj.id
 activeSong.append(playRecordBtn)
 
 playRecordBtn.addEventListener('click', ()=> {
+    // PLAYER BUG SOMETHING NEEDS TO GO HERE TO CLEAR OLD AUDIO
     const musicPlayer = document.createElement('audio')
+    
     musicPlayer.src = songObj.mp3
     // musicPlayer.autoplay = true
     recordPlayer.append(musicPlayer)
