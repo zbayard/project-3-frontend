@@ -114,7 +114,7 @@ function createUser () {
 }
 
 function setUser (userName) {
-userInfo.innerHTML = `${userName}'s page`
+
 
 function setActiveUser (userArr) {
 
