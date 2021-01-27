@@ -17,7 +17,14 @@ const myRecordsBtn = document.querySelector('#my-records')
 const myFriends = document.querySelector('#my-friends')
 const mainDiv = document.querySelector('div#main-div')
 
+
 ///////////////// FETCH REQUESTS ////////////////
+const testButton = document.createElement('button')
+body.append(testButton)
+testButton.addEventListener('click', function (e) {
+renderUserView()
+})
+
 
 function deleteSong(songId) {
     fetch(`http://localhost:3000/songs/${songId}`, {
@@ -27,6 +34,35 @@ function deleteSong(songId) {
 }
 
 
+function postOwnership (ownershipObj) {
+    fetch('http://localhost:3000/ownerships', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': "application/json"
+    }, 
+    body: JSON.stringify(ownershipObj)})
+.then (res => res.json())
+.then (ownership => console.log(ownership))
+}
+
+function postUser (userObj) {
+    fetch('http://localhost:3000/users', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': "application/json"
+    },
+    body: JSON.stringify(userObj)}).then
+    (res => res.json()).then
+    (user => console.log(user))
+}
+
+function getUser (userId) {
+    return fetch(`http://localhost:3000/users/${userId}`)
+    .then(res => res.json())
+    
+}
 
 function getUsers () {
 mainDiv.innerHTML = ""
@@ -79,14 +115,18 @@ function postSong(songData) {
   }
 
 /////////////// EVENT LISTENERS /////////////////////
+
+    
+
+
 myFriends.addEventListener('click', function(e) {
     getUsers()
 })
 
 
-// window.addEventListener('DOMContentLoaded', function (e) {
-//     promptUser ()
-// })
+window.addEventListener('DOMContentLoaded', function (e) {
+    promptUser ()
+})
 
 newSongButton.addEventListener('click', function(e) {
     mainDiv.innerHTML = ""
@@ -116,7 +156,13 @@ myRecordsBtn.addEventListener("click", ()=>{
 
 
 
+
 //////////////// HELPER METHODS //////////////////
+
+function renderHomePage () {
+
+}
+
 
 function promptUser () {
     userName = window.prompt('Please enter your username')
@@ -125,8 +171,57 @@ function promptUser () {
 }
 
 
-function createUser () {
+
+
+function renderNewUserForm (newUser) {
+    mainDiv.innerHTML = 'Looks like we have a new collector! Please enter your information so we can get you started.'
+   
     
+    const newUserForm = document.createElement('form')
+    newUserForm.setAttribute('id', 'new-user-form')
+    const nameLabel = document.createElement('label')
+    nameLabel.setAttribute('for', 'name')
+    nameLabel.textContent = 'Name:'
+    const nameInput = document.createElement('input')
+    nameInput.setAttribute('type', 'text')
+    nameInput.setAttribute('name', 'name')
+    nameInput.setAttribute('id', 'name')
+    const ageLabel = document.createElement('label')
+    ageLabel.setAttribute('for', 'age')
+    ageLabel.textContent = 'Age:'
+    const ageInput = document.createElement('input')
+    ageInput.setAttribute('id', 'age')
+    ageInput.setAttribute('name', 'age')
+    ageInput.setAttribute('type', 'number')
+    const bioLabel = document.createElement('label')
+    bioLabel.setAttribute('for', 'bio')
+    bioLabel.textContent = 'Bio:'
+    const bioInput = document.createElement('input')
+    bioInput.setAttribute('id', 'bio')
+    bioInput.setAttribute('name', 'bio')
+    bioInput.setAttribute('type', 'text')
+    const userSubmit = document.createElement('input')
+    userSubmit.setAttribute('type', 'submit')
+    newUserForm.append( nameLabel, nameInput, ageLabel, ageInput, bioLabel, bioInput, userSubmit)
+    mainDiv.append(newUserForm)
+  
+    newUserForm.addEventListener('submit', function (e) {
+        e.preventDefault ()
+        newUserObj = {
+            name: e.target.name.value,
+            age: e.target.age.value,
+            bio: e.target.bio.value
+        }
+        postUser(newUserObj)
+        currentUser.textContent = newUserObj.name
+    })}
+    
+      
+function renderUserView (userId) {
+   user =  getUser(userId)
+    .then
+    mainDiv.innerHTML = `${user.name}`
+
 }
 
 function setUser (userName) {
@@ -137,9 +232,10 @@ function setActiveUser (userArr) {
     let activeUser = userArr.filter ( user => user.name === userName)
    if (activeUser[0]) {
         currentUser.innerHTML = activeUser[0].name
+        currentUser.setAttribute('data-id', activeUser[0].id)
    }
    else {
-       createUser ()
+       renderNewUserForm (userName)
    }
 }
 
@@ -209,7 +305,17 @@ activeSong.innerHTML = `<h1 id="song-title">${songObj.name}</h1>
  <button id='delete-button'>Delete ${songObj.name}</button>`
  mainDiv.innerHTML= ""
 mainDiv.append(activeSong)
-
+const addRecordBtn = document.createElement('button')
+addRecordBtn.innerHTML= 'Add this record to your collection'
+addRecordBtn.dataset.id = songObj.id
+activeSong.append(addRecordBtn)
+addRecordBtn.addEventListener('click', function(e){
+ownershipObj = {
+    song_id: songObj.id,
+    user_id: currentUser.dataset.id
+}
+postOwnership(ownershipObj)
+})
 
 }
 // const deleteBtn = document.createElement("button")
