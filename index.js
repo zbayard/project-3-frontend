@@ -1,8 +1,7 @@
 
 
 
-// getUsers()
-// getSongs ()
+
 
 //////////  ELEMENT DECLARATIONS ///////////////////////
 usersContainer = document.querySelector('div#users')
@@ -23,7 +22,10 @@ const testButton = document.createElement('button')
 body.append(testButton)
 testButton.addEventListener('click', function (e) {
 renderUserView()
+
 })
+
+
 
 
 function deleteSong(songId) {
@@ -58,11 +60,18 @@ function postUser (userObj) {
     (user => console.log(user))
 }
 
+function getUserSongs (userId) {
+    return fetch (`http://localhost:3000/users/${userId}/songs`)
+    .then (res => res.json())
+}
+
 function getUser (userId) {
     return fetch(`http://localhost:3000/users/${userId}`)
     .then(res => res.json())
+
     
 }
+
 
 function getUsers () {
 mainDiv.innerHTML = ""
@@ -124,9 +133,9 @@ myFriends.addEventListener('click', function(e) {
 })
 
 
-window.addEventListener('DOMContentLoaded', function (e) {
-    promptUser ()
-})
+// window.addEventListener('DOMContentLoaded', function (e) {
+//     promptUser ()
+// })
 
 newSongButton.addEventListener('click', function(e) {
     mainDiv.innerHTML = ""
@@ -216,13 +225,32 @@ function renderNewUserForm (newUser) {
         currentUser.textContent = newUserObj.name
     })}
     
-      
-function renderUserView (userId) {
-   user =  getUser(userId)
-    .then
-    mainDiv.innerHTML = `${user.name}`
 
-}
+    function renderUserFaves (songArr) {
+        console.log(songArr)
+        songString = ""
+        songArr.forEach (song => songString +=` ${song.name}\n`)
+        console.log(songString)
+        return songString
+    }
+      
+
+function renderUserView (userId) {
+    userSongs = getUser(userId).then (user => user.songs)
+    console.log(userSongs)
+    const songArray = getUserSongs(userId).then (arr => renderUserFaves(arr))
+    // .then (data => console.log('.then', data))
+    console.log(songArray)
+   user =  getUser(userId)
+    .then(user => mainDiv.innerHTML = `Name:${user.name}
+    <br>
+    Age:${user.age}
+    <br>
+    Bio: ${user.bio}
+    <br>
+    Favorites: ${songArray}`
+    
+    )}
 
 function setUser (userName) {
 
@@ -329,6 +357,9 @@ function renderUser(user){
     newUser.dataset.id = user.id
     newUser.innerHTML = user.name
     mainDiv.append(newUser)
+    newUser.addEventListener('click', function (e) {
+        renderUserView(`${newUser.dataset.id}`)
+        })
 
 }
 
