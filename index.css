@@ -1,8 +1,5 @@
 
-.{
-    width: 50px;
-    border: solid;
-}
+
 
 
 #active-song{
@@ -10,6 +7,28 @@
     justify-content: flex-end;
     align-items: flex-end;
    
+}
+
+div.user-card {
+    padding: 10px;
+}
+
+#main-div {
+height: 800px;
+width: 750px;
+border: 50px;
+border: solid;
+float: left;
+}
+
+
+#active-song {
+display: flex;
+align-items: flex-start;
+flex-direction: column;
+height: 400px;
+width: 600px;
+float: left;
 }
 
 img {
@@ -32,6 +51,53 @@ button {
     display: inline-block;
     font-size: 16px;
   }
+
+  .record-player-disc:hover {
+    cursor: pointer;
+  }
+
+  .record-player-disc {
+    float: right;
+    display: flex;
+    
+    order: 1;
+    width: 550px;
+    height: 550px;
+    border-radius: 50%;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 1px solid #000000;
+    /* background-image: url('./img.jpg'); */
+    position: relative;
+    animation: rotate 20s infinite linear;
+    animation-play-state: paused;
+    filter: grayscale(1);
+}
+
+.record-player-disc .hole {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #15202b;
+    border: 1px solid black;
+    box-shadow: inset 1px 1px 6px #000000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+.record-player-disc.playing {
+    animation: rotate 20s infinite linear;
+    filter: grayscale(0);
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
 
   
 
