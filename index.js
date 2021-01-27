@@ -16,13 +16,14 @@ const currentUser = document.querySelector('p#active-user')
 const myRecordsBtn = document.querySelector('#my-records')
 const myFriends = document.querySelector('#my-friends')
 const mainDiv = document.querySelector('div#main-div')
+const recordPlayer = document.querySelector('.record-player-disc')
 
 
 ///////////////// FETCH REQUESTS ////////////////
 const testButton = document.createElement('button')
 body.append(testButton)
 testButton.addEventListener('click', function (e) {
-renderUserView()
+    
 })
 
 
@@ -309,6 +310,19 @@ const addRecordBtn = document.createElement('button')
 addRecordBtn.innerHTML= 'Add this record to your collection'
 addRecordBtn.dataset.id = songObj.id
 activeSong.append(addRecordBtn)
+const playRecordBtn = document.createElement('button')
+playRecordBtn.innerHTML = 'Play Record'
+playRecordBtn.dataset.id = songObj.id
+activeSong.append(playRecordBtn)
+
+playRecordBtn.addEventListener('click', ()=> {
+    const musicPlayer = document.createElement('audio')
+    musicPlayer.src = songObj.mp3
+    // musicPlayer.autoplay = true
+    recordPlayer.append(musicPlayer)
+    playTheRecord(songObj.mp3, songObj.image)
+})
+
 addRecordBtn.addEventListener('click', function(e){
 ownershipObj = {
     song_id: songObj.id,
@@ -408,29 +422,33 @@ function getNewSongForm(){
 
 
 // *****RECORD PLAYER*****
+function playTheRecord(song, recordImage){
+    const audio = new Audio(song);
+    console.log(song)
+    
 
-// const audio = new Audio("./music.mp3");
+    let disc
 
-// let disc, img;
+    // document.addEventListener("DOMContentLoaded", initialize);
 
-// document.addEventListener("DOMContentLoaded", initialize);
+    function initialize() {
+    disc = document.querySelector(".record-player-disc ");
+    disc.addEventListener("click", togglePlayback);
+    disc.setAttribute('style', `background-image: url(${recordImage})`)
+    }
+    initialize()
 
-// function initialize() {
-//   disc = document.querySelector(".record-player-disc ");
-//   disc.addEventListener("click", togglePlayback);
-// }
+    function addEventHandlers() {
 
-// function addEventHandlers() {
+    }
 
-// }
-
-// function togglePlayback() {
-//   if (audio.paused) {
-//     disc.classList.add("playing");
-//     audio.play();
-//   } else {
-//     disc.classList.remove("playing");
-//     audio.pause();
-//   }
-// }
-
+    function togglePlayback() {
+    if (audio.paused) {
+        disc.classList.add("playing");
+        audio.play();
+    } else {
+        disc.classList.remove("playing");
+        audio.pause();
+    }
+    }
+}
