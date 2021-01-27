@@ -12,7 +12,8 @@ const newSongForm = document.querySelector('#new-song-form')
 const activeSong = document.querySelector('div#active-song')
 const actSongTitle = document.querySelector('h1#song-title')
 const currentUser = document.querySelector('p#active-user')
-const myRecordsBtn = document.querySelector('#my-records')
+const recordsBtn = document.querySelector('#records')
+const favesButton = document.querySelector('#favorites-button')
 const myFriends = document.querySelector('#my-friends')
 const mainDiv = document.querySelector('div#main-div')
 const recordPlayer = document.querySelector('.record-player-disc')
@@ -70,7 +71,7 @@ function getUserSongs (userId) {
 function getUser (userId) {
     return fetch(`http://localhost:3000/users/${userId}`)
     .then(res => res.json())
-
+    
     
 }
 
@@ -135,9 +136,9 @@ myFriends.addEventListener('click', function(e) {
 })
 
 
-// window.addEventListener('DOMContentLoaded', function (e) {
-//     promptUser ()
-// })
+window.addEventListener('DOMContentLoaded', function (e) {
+    promptUser ()
+})
 
 newSongButton.addEventListener('click', function(e) {
     mainDiv.innerHTML = ""
@@ -159,7 +160,7 @@ mainDiv.addEventListener('click', function(e) {
     }
 })
 
-myRecordsBtn.addEventListener("click", ()=>{
+recordsBtn.addEventListener("click", ()=>{
     getSongs()
 })
 
@@ -231,28 +232,36 @@ function renderNewUserForm (newUser) {
     function renderUserFaves (songArr) {
         console.log(songArr)
         songString = ""
-        songArr.forEach (song => songString +=` ${song.name}\n`)
-        console.log(songString)
-        return songString
+        const imageBox = document.createElement('div')
+        songArr.forEach (song => function () {
+            const fav = document.createElement('img')
+            fav.setAttribute('src', song.image)
+            imageBox.append('fav')
+        })
+        
+        return imageBox
     }
       
 
 function renderUserView (userId) {
-    userSongs = getUser(userId).then (user => user.songs)
-    console.log(userSongs)
-    const songArray = getUserSongs(userId).then (arr => renderUserFaves(arr))
-    // .then (data => console.log('.then', data))
-    console.log(songArray)
-   user =  getUser(userId)
-    .then(user => mainDiv.innerHTML = `Name:${user.name}
+    mainDiv.innerHTML = ""
+
+    const userShowDiv = document.createElement('div')
+    getUser(userId)
+    .then(user => userShowDiv.innerHTML = `Name:${user.name}
     <br>
     Age:${user.age}
     <br>
     Bio: ${user.bio}
     <br>
-    Favorites: ${songArray}`
-    
-    )}
+    Favorites: `
+   
+    )
+     getUser(userId).then (user => {
+        userShowDiv.append(renderUserFaves(user.songs))
+    }).then (mainDiv.append(userShowDiv) )
+     
+}
 
 function setUser (userName) {
 
