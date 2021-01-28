@@ -20,14 +20,7 @@ const recordPlayer = document.querySelector('.record-player-disc')
 
 
 ///////////////// FETCH REQUESTS ////////////////
-const testButton = document.createElement('button')
-body.append(testButton)
-testButton.addEventListener('click', function (e) {
-    
 
-// renderUserView()
-
-})
 
 
 
@@ -79,13 +72,32 @@ function getUser (userId) {
 
 function getUsers () {
 mainDiv.innerHTML = ""
+const usersDiv = document.createElement('div')
+usersDiv.setAttribute('id', 'users-div')
+function renderUser(user){
+    const newUser = document.createElement('div')
+    const faveCount = document.createElement('p')
+    faveCount.id = 'fave-count'
+    faveCount.innerHTML = `${user.songs.length} favorite records`
+    
+    newUser.setAttribute('class', 'user-card')
+    newUser.dataset.id = user.id
+    newUser.innerHTML = user.name
+    newUser.append(faveCount)
+    usersDiv.append(newUser)
+    newUser.addEventListener('click', function (e) {
+        renderUserView(`${newUser.dataset.id}`)
+        })
+
+}
 fetch(`http://localhost:3000/users`)
 .then(response => response.json())
 .then(users => users.forEach(user => renderUser(user)))
+mainDiv.append(usersDiv)
 }
 
 function getSongs () {
-    mainDiv.innerHTML = "<h1>Record Library</h1>"
+    mainDiv.innerHTML = '<h1 id="library-header">Record Library</h1>'
     fetch('http://localhost:3000/songs')
     .then(res => res.json())
     .then(songs => songs.forEach( song => renderSong(song)))
@@ -130,7 +142,8 @@ function postSong(songData) {
 /////////////// EVENT LISTENERS /////////////////////
 
     favesButton.addEventListener('click', function (e) {
-        mainDiv.innerHTML = ""
+        mainDiv.innerHTML = `<h1 id='fave-header'>${currentUser.textContent}'s Collection</h1>`
+
         getUserSongs(currentUser.dataset.id)
         .then (data => data.forEach (song => renderSong(song)))
     })
@@ -176,9 +189,8 @@ recordsBtn.addEventListener("click", ()=>{
 
 //////////////// HELPER METHODS //////////////////
 
-function renderHomePage () {
 
-}
+
 
 
 function promptUser () {
@@ -231,27 +243,22 @@ function renderNewUserForm (newUser) {
         }
         postUser(newUserObj)
         currentUser.textContent = newUserObj.name
+        getSongs()
     })}
     
 
     function renderUserFaves (songArr) {
-        console.log(songArr)
-        songString = ""
-        const imageBox = document.createElement('div')
-        songArr.forEach (song => function () {
-            const fav = document.createElement('img')
-            fav.setAttribute('src', song.image)
-            imageBox.append('fav')
-        })
+        console.log(songArr.forEach (song => (song.name)))
         
-        return imageBox
+        return songArr.forEach (song => (console.log(song.name)))
+        
     }
       
 
 function renderUserView (userId) {
     mainDiv.innerHTML = ""
-
     const userShowDiv = document.createElement('div')
+    userShowDiv.setAttribute('class', 'user-show-list')
     getUser(userId)
     .then(user => userShowDiv.innerHTML = `Name:${user.name}
     <br>
@@ -260,13 +267,67 @@ function renderUserView (userId) {
     Bio: ${user.bio}
     <br>
     Favorites: `
-   
     )
-     getUser(userId).then (user => {
-        userShowDiv.append(renderUserFaves(user.songs))
-    }).then (mainDiv.append(userShowDiv) )
-     
-}
+    // const imgDiv = con
+    getUser(userId).then
+        (user => user.songs.forEach (song => {
+        console.log(song)
+        renderFaves(song)
+        // const songImg = document.createElement('img')
+        // songImg.setAttribute('class', 'fave-image')
+        // songImg.setAttribute('src', song.image)
+        // userShowDiv.append(songImg)
+    
+        function renderFaves(song) {
+            const newSong = document.createElement('div')
+            // newSong.innerHTML = song.name
+            newSong.setAttribute('class', 'song-div')
+            newSong.dataset.id = song.id
+        
+        
+            // ****FLIP CARD DIVS****
+            const newSongInner = document.createElement('div')
+            newSongInner.setAttribute('class', 'flip-card-inner')
+            const newSongFront = document.createElement('div')
+            newSongFront.setAttribute('class', 'flip-card-front')
+            const newSongBack = document.createElement('div')
+         
+            newSongBack.setAttribute('class', 'flip-card-back')
+            newSongBack.dataset.id = song.id
+        
+            // ****OTHER SHIT FOR FLIP CARDS*****
+            const trackName = document.createElement('h1')
+            trackName.innerHTML = song.name
+            const trackArtist = document.createElement('p')
+            trackArtist.innerHTML = song.artist
+            const songImg = document.createElement("img")
+            songImg.setAttribute('class', 'record-image')
+            songImg.src = song.image
+            
+        
+            // ***APPENDS TO DIVS***
+            
+            newSongBack.append(trackName, trackArtist)
+            newSongFront.append(songImg)
+            newSongInner.append(newSongFront, newSongBack)
+            newSong.append(newSongInner)
+        
+            userShowDiv.append(newSong)
+            
+        
+            
+            
+         
+        
+            // deleteBtn.addEventListener("click", () => {
+            //     newSong.remove()
+            //     deleteSong(song)
+            // })
+        }
+    
+     mainDiv.append(userShowDiv)}))
+        }
+
 
 function setUser (userName) {
 
@@ -277,6 +338,8 @@ function setActiveUser (userArr) {
    if (activeUser[0]) {
         currentUser.innerHTML = activeUser[0].name
         currentUser.setAttribute('data-id', activeUser[0].id)
+        getSongs()
+
    }
    else {
        renderNewUserForm (userName)
@@ -305,14 +368,21 @@ function leaveNote(songObj, songDiv){
     songDiv.append(noteForm)
     console.log(songDiv)
     console.log(songObj)
+
+    
     
     
 
     noteForm.addEventListener("submit", e => {
         e.preventDefault()
         console.log(e)
-        
 
+        const noteArea = document.querySelector('p#bio')
+        const newNoteInput = e.target.note.value
+        
+        noteArea.innerHTML = newNoteInput
+        
+        
         const newNoteObj = {
             bio: e.target.note.value
         }
@@ -344,7 +414,7 @@ activeSong.innerHTML = `<h1 id="song-title">${songObj.name}</h1>
 <br>
 <img id='song-image' src= ${songObj.image}>
 <br>
-<p>${songObj.bio}</p>
+<p id='bio'>${songObj.bio}</p>
 <br>
  <button id='delete-button'>Delete ${songObj.name}</button>`
  mainDiv.innerHTML= ""
@@ -357,14 +427,22 @@ const playRecordBtn = document.createElement('button')
 playRecordBtn.innerHTML = 'Load Record'
 playRecordBtn.dataset.id = songObj.id
 activeSong.append(playRecordBtn)
+const editBtn = document.createElement("button")
+editBtn.id = "leave-note"
+editBtn.innerHTML = "Leave Note"
+activeSong.append(editBtn)
+
 
 playRecordBtn.addEventListener('click', ()=> {
     // PLAYER BUG SOMETHING NEEDS TO GO HERE TO CLEAR OLD AUDIO
-    const musicPlayer = document.createElement('audio')
-    
-    musicPlayer.src = songObj.mp3
+    // recordPlayer.innerHTML = ""
+
+    console.log(document.querySelector('audio'))
+    // const musicPlayer = document.createElement('audio')
+    // musicPlayer.id = 'music-player'
+    // musicPlayer.src = songObj.mp3
     // musicPlayer.autoplay = true
-    recordPlayer.append(musicPlayer)
+    // recordPlayer.append(musicPlayer)
     playTheRecord(songObj.mp3, songObj.image)
 })
 
@@ -382,17 +460,7 @@ addRecordBtn.addEventListener('click', function(e){
 // newSong.append(deleteBtn)
 
 
-function renderUser(user){
-    const newUser = document.createElement('div')
-    newUser.setAttribute('class', 'user-card')
-    newUser.dataset.id = user.id
-    newUser.innerHTML = user.name
-    mainDiv.append(newUser)
-    newUser.addEventListener('click', function (e) {
-        renderUserView(`${newUser.dataset.id}`)
-        })
 
-}
 
 function renderSong(song) {
     const newSong = document.createElement('div')
@@ -433,6 +501,7 @@ function renderSong(song) {
     // editBtn.id = "leave-note"
     // editBtn.innerHTML = "leave note"
     // newSong.append(editBtn)
+
     mainDiv.append(newSong)
 
     // deleteBtn.addEventListener("click", () => {
@@ -442,7 +511,10 @@ function renderSong(song) {
 }
 
 
+
+
 function getNewSongForm(){
+    mainDiv.innerHTML = `<h1 id="new-song-form">Enter Song Info</h1>`
     const newSongForm = document.createElement("form")
     newSongForm.setAttribute('id', 'new-song-form')
     newSongForm.innerHTML = `<label for="name">Name:</label><br>
@@ -457,7 +529,7 @@ function getNewSongForm(){
                             <input type="text" id="mp3" name="mp3"><br>
                             <label for="bio">Bio:</label><br>
                             <input type="text" id="bio" name="bio"><br>
-                            <input type="submit">Add New Record`
+                            <input style='background-color: background-color: #666145;' type="submit" value='Add New Record'>`
 
     mainDiv.append(newSongForm)
 
@@ -486,9 +558,24 @@ function getNewSongForm(){
 
 // *****RECORD PLAYER*****
 function playTheRecord(song, recordImage){
-    const audio = new Audio(song);
     console.log(song)
+    // let audio = new Audio(song);
+    const oldAudio = document.querySelectorAll('audio')
+    if (oldAudio){
+    oldAudio.forEach(tag =>{
+        tag.src = ""
+    })
+    }
+    const audio = document.createElement('audio')
+    audio.src = song
+ 
+    const recordBox = document.querySelector('div#record-player-box')
+    recordBox.append(audio)
+
+
+ 
     
+   
 
     let disc
 
@@ -497,13 +584,17 @@ function playTheRecord(song, recordImage){
     function initialize() {
     disc = document.querySelector(".record-player-disc ");
     disc.addEventListener("click", togglePlayback);
+    // const recImage = document.createElement('div')
+    // recImage.id = 'rec-image'
+    // recImage.setAttribute('style',`background-image: url(${recordImage})`) 
+    // disc.append(recordImage)
     disc.setAttribute('style', `background-image: url(${recordImage})`)
     }
     initialize()
 
-    function addEventHandlers() {
+    // function addEventHandlers() {
 
-    }
+    // }
 
     function togglePlayback() {
     if (audio.paused) {
