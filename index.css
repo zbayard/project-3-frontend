@@ -106,7 +106,8 @@ body {
 
 
 #main-div {
-  height: 800px;
+  border-radius: 8px;
+  height: 600px;
   width: 750px;
   color: red;
   border: 50px;
@@ -173,10 +174,11 @@ h1#library-header {
     background-repeat: no-repeat;
     border: 1px solid #000000;
   
-    position: relative;
+    position: absolute;
     animation: rotate 20s infinite linear;
     animation-play-state: paused;
     filter: grayscale(1);
+    
 }
 
 div#record-player-box {
@@ -185,6 +187,7 @@ div#record-player-box {
   align-items: center;
   background-color: rgb(231, 243, 186);
   border-color: black;
+  
   float: right;
   border: solid;
   width: 600px;
@@ -192,6 +195,42 @@ div#record-player-box {
   border-radius: 8px;
 }
 
+
+
+
+
+
+#record-player-base {
+font-size: 50px;
+
+font-family: 'Audiowide', cursive;
+width: 450px;
+height: 185x;
+font-size: 50px;
+color: #fff;
+text-align: center;
+-webkit-animation: record-player-base 1s ease-in-out infinite alternate;
+-moz-animation: record-player-base 1s ease-in-out infinite alternate;
+animation: record-player-base 1s ease-in-out infinite alternate;
+position: fixed;
+bottom: 40px;
+right: 75px;
+background-color: black;
+border-radius: 50%;
+}
+
+@-webkit-keyframes record-player-base {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+  }
+  to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+  }
+}
+
+#logo {
+  align-self: flex-end;
+}
 
 .record-player-disc .hole {
     width: 60px;
@@ -205,6 +244,8 @@ div#record-player-box {
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
+
 
 .record-player-disc.playing {
     animation: rotate 20s infinite linear;
