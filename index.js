@@ -26,7 +26,7 @@ const recordPlayer = document.querySelector('.record-player-disc')
 
 
 function deleteSong(songId) {
-    fetch(`http://localhost:3000/songs/${songId}`, {
+    fetch(`https://floating-cliffs-68685.herokuapp.com/songs/${songId}`, {
         method: 'DELETE'
     })
     
@@ -34,7 +34,7 @@ function deleteSong(songId) {
 
 
 function postOwnership (ownershipObj) {
-    fetch('http://localhost:3000/ownerships', {
+    fetch('https://floating-cliffs-68685.herokuapp.com/ownerships', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function postOwnership (ownershipObj) {
 }
 
 function postUser (userObj) {
-    fetch('http://localhost:3000/users', {
+    fetch('https://floating-cliffs-68685.herokuapp.com/users', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -58,12 +58,12 @@ function postUser (userObj) {
 }
 
 function getUserSongs (userId) {
-    return fetch (`http://localhost:3000/users/${userId}/songs`)
+    return fetch (`https://floating-cliffs-68685.herokuapp.com/users/${userId}/songs`)
     .then (res => res.json())
 }
 
 function getUser (userId) {
-    return fetch(`http://localhost:3000/users/${userId}`)
+    return fetch(`https://floating-cliffs-68685.herokuapp.com/users/${userId}`)
     .then(res => res.json())
     
     
@@ -90,7 +90,7 @@ function renderUser(user){
         })
 
 }
-fetch(`http://localhost:3000/users`)
+fetch(`https://floating-cliffs-68685.herokuapp.com/users`)
 .then(response => response.json())
 .then(users => users.forEach(user => renderUser(user)))
 mainDiv.append(usersDiv)
@@ -98,19 +98,19 @@ mainDiv.append(usersDiv)
 
 function getSongs () {
     mainDiv.innerHTML = '<h1 id="library-header">Record Library</h1>'
-    fetch('http://localhost:3000/songs')
+    fetch('https://floating-cliffs-68685.herokuapp.com/songs')
     .then(res => res.json())
     .then(songs => songs.forEach( song => renderSong(song)))
 }
 
 function getSong (songId) {
-    fetch(`http://localhost:3000/songs/${songId}`)
+    fetch(`https://floating-cliffs-68685.herokuapp.com/songs/${songId}`)
     .then(res => res.json())
     .then(song => activateSong(song))
 }
 
 function postSong(songData) {
-    fetch('http://localhost:3000/songs', {
+    fetch('https://floating-cliffs-68685.herokuapp.com/songs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ function postSong(songData) {
   }
 
   function patchNote(songId, newNoteObj){
-      fetch(`http://localhost:3000/songs/${songId}`, {
+      fetch(`https://floating-cliffs-68685.herokuapp.com/songs/${songId}`, {
           method: 'PATCH',
           headers: {
               'Content-Type': 'application/json',
@@ -347,7 +347,7 @@ function setActiveUser (userArr) {
 }
 
 function searchUsers () {
-    fetch(`http://localhost:3000/users`)
+    fetch(`https://floating-cliffs-68685.herokuapp.com/users`)
 .then(response => response.json())
 .then(users => setActiveUser(users))
 
